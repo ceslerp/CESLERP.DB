@@ -22,13 +22,14 @@ BEGIN
     CREATE TABLE cmn_EmailNotification (
         Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), -- Unique GUID for each notification
         NotificationConfigId VARCHAR(255) NOT NULL, -- Foreign Key to EmailNotificationConfig table
-        FromEmails NVARCHAR(MAX) NULL, -- Comma-separated list of email addresses (Nullable)
-        ToEmails NVARCHAR(MAX) NULL, -- Comma-separated list of email addresses (Nullable)
+        FromEmail NVARCHAR(MAX) NOT NULL, 
+        ToEmails NVARCHAR(MAX) NOT NULL, -- Comma-separated list of email addresses (Nullable)
         CcEmails NVARCHAR(MAX) NULL, -- Comma-separated list of email addresses (Nullable)
         BccEmails NVARCHAR(MAX) NULL, -- Comma-separated list of email addresses (Nullable)
-        Message NVARCHAR(MAX) NULL, -- HTML email message (Nullable)
+        Subject NVARCHAR(1000) NOT NULL, -- HTML email message (Nullable)
+        Message NVARCHAR(MAX) NOT NULL, -- HTML email message (Nullable)
         LastSentTime DATETIME NULL, -- Date and time when the notification was last sent (Nullable)
-        Status NVARCHAR(50) NULL, -- Status of the email notification (Nullable)
+        Status NVARCHAR(50) NOT NULL, -- Status of the email notification 
         Active BIT NOT NULL DEFAULT 1, -- 1 = Active, 0 = Inactive (Defaults to Active)
         Parameters NVARCHAR(MAX) NULL, -- Json parameter-value pairs (Nullable)
         
@@ -90,11 +91,11 @@ BEGIN
                 ('CEOProjectApproval', -- Code
                 'CEO Project Approval', -- Name
                 'CEOProjectApproval.html', -- TemplateFile
-                'select ''Project Approval Notification'' as __Subject, w.WorkSpaceName as WorkSpaceName, ev.Title as Title, ev.NameWithInitial as EmployeeName, ev.EPFNo as EPFNo
+                'select ''Project Approval Notification'' as Subject, w.WorkSpaceName as WorkSpaceName, ev.Title as Title, ev.NameWithInitial as EmployeeName, ev.EPFNo as EPFNo
                 from cmn_WorkSpace w 
-                left join cmn_EmployeeVersion ev on ev.EmployeeId = __@userEmployeeId
-                where w.WorkSpaceId = __@workspaceId', -- DataQuery
-                'select ''notifications.ceslerp@gmail.com'' as [From]', -- FromQuery
+                left join cmn_EmployeeVersion ev on ev.EmployeeId = @userEmployeeId
+                where w.WorkSpaceId = @workspaceId', -- DataQuery
+                'select ''notifications.ceslerp@gmail.com'' as [Email]', -- FromQuery
                 'select NameWithInitial as Name, Email from EmployeeRoleView
                 where RoleCode=''CEO''', -- ToQuery
                 null, -- CcQuery
