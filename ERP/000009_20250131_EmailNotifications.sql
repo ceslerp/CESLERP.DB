@@ -118,4 +118,14 @@ BEGIN
     END
 END
 
+IF NOT EXISTS (
+    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'cmn_EmailNotification' 
+    AND COLUMN_NAME = 'Error'
+)
+BEGIN
+    ALTER TABLE [cmn_EmailNotification] 
+    ADD Error NVARCHAR(MAX) NULL;
+END
+
 
