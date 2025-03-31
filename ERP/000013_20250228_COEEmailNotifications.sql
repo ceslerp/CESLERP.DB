@@ -86,7 +86,7 @@ BEGIN
             VALUES
                 ('COEProjectApproval', -- Code
                 'COE Project Approval', -- Name
-                'ProjectApproval.html', -- TemplateFile
+                'CEOProjectApproval.html', -- TemplateFile
                 '''Project Approval Notification'' AS Subject, 
 				CONCAT(
 					''Project code request "'', w.WorkSpaceName, 
