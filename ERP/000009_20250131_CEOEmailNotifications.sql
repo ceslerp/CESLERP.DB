@@ -127,5 +127,3 @@ BEGIN
     ALTER TABLE [cmn_EmailNotification] 
     ADD Error NVARCHAR(MAX) NULL;
 END
-
-
