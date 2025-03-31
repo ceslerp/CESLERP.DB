@@ -63,7 +63,7 @@ END
 
 BEGIN
     -- Check if the Code already exists to prevent duplicate entries
-    IF NOT EXISTS (SELECT 1 FROM cmn_EmailNotificationConfig WHERE Code = 'COEProjectApproval')
+    IF NOT EXISTS (SELECT 1 FROM cmn_EmailNotificationConfig WHERE Code = 'CEOProjectRejected')
     BEGIN
         -- Check if the required view and tables exist
         IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = 'EmployeeRoleView')
@@ -84,9 +84,9 @@ BEGIN
                 ,[CreatedDate]
                 ,[UpdatedDate])
             VALUES
-                ('ProjectRejected', -- Code
-                'Project Rejected', -- Name
-                'ProjectRejected.html', -- TemplateFile
+                ('CEOProjectRejected', -- Code
+                'CEO Project Rejected', -- Name
+                'CEOProjectApproval.html', -- TemplateFile
                 '''Project Rejected Notification'' AS Subject, 
 				CONCAT(
 					''Project code "'', w.WorkSpaceName, 
