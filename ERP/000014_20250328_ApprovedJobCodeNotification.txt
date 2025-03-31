@@ -96,6 +96,7 @@ BEGIN
                 from cmn_WorkSpace w 
                 left join cmn_EmployeeVersion ev on ev.EmployeeId = @userEmployeeId
                 where w.WorkSpaceId = @workspaceId', -- DataQuery
+		 'select ''notifications.ceslerp@gmail.com'' as [Email]', -- FromQuery
 				'SELECT rv.NameWithInitial,  rv.email AS Email
 				FROM EmployeeRoleView rv
 				WHERE (rv.RoleCode = ''COE'') and rv.workspaceId = (select coeWorkSpaceId 
