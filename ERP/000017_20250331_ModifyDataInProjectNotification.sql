@@ -64,8 +64,8 @@ BEGIN
             UPDATE cmn_EmailNotificationConfig SET [DataQuery] = 'SELECT ''Project is Approved'' AS Subject, 
 				CONCAT(
 					''Project code "'', w.WorkSpaceName, 
-					''" from '', ev.Title, '' '', ev.NameWithInitial, 
-					'' ('', ev.EPFNo, '') is approved.''
+					''" is approved by '', ev.Title, '' '', ev.NameWithInitial, 
+					'' ('', ev.EPFNo, '').''
 				) AS BodyData
                 from cmn_WorkSpace w 
                 left join cmn_EmployeeVersion ev on ev.EmployeeId = @userEmployeeId
