@@ -1,7 +1,6 @@
-USE [ERP1]
+USE [ERP]
 GO
 
-/****** Object:  Table [dbo].[hrm_LeaveType]    Script Date: 6/11/2025 2:50:52 PM ******/
 SET ANSI_NULLS ON
 GO
 
