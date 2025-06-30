@@ -31,7 +31,8 @@ INSERT INTO [dbo].[hrm_LeaveType] (
     [IsUncountable], 
     [NoOfDays], 
     [SpanOverLeaveYear], 
-    [Active]
+    [Active],
+    [LineNumber] 
 
 ) VALUES
 ('89ff6742-d0ea-4a0f-9c97-0127043411ca', 'AL', 'Annual', 'Leave granted annually to employees.', 0, 14, 1, 1,2),
