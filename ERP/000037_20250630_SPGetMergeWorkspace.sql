@@ -1,12 +1,12 @@
 USE [ERP]
 GO
-/****** Object:  StoredProcedure [dbo].[cmn_SPGetMergeWorkspace]    Script Date: 6/26/2025 8:46:01 AM ******/
+/****** Object:  StoredProcedure [dbo].[cmn_SPGetMergeWorkspace]    Script Date: 6/30/2025 5:12:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
--- EXEC [cmn_SPGetMergeWorkspace] '3d997732-5d4a-4d9a-b6cd-29915a42206f'
+-- EXEC [cmn_SPGetMergeWorkspace] 'ec6e740e-72c5-4d13-ac6a-4097ecc74b9c'
 
 ALTER PROCEDURE [dbo].[cmn_SPGetMergeWorkspace] 
     @employeeId UNIQUEIDENTIFIER
@@ -23,7 +23,8 @@ BEGIN
 	IF(@IntCnt = 0)
 	BEGIN
 		DECLARE @EmpWorkSpaceId UNIQUEIDENTIFIER;
-		SELECT @EmpWorkSpaceId = WorkSpaceId FROM cmn_EmployeeVersion WHERE EmployeeId = @employeeId
+		SELECT @EmpWorkSpaceId = (CASE WHEN SOEUnitId IS NULL THEN WorkSpaceId ELSE SOEUnitId END)							
+		FROM cmn_EmployeeVersion WHERE EmployeeId = @employeeId
 
 		INSERT INTO #TempWorkspace VALUES (@EmpWorkSpaceId)
 	END
