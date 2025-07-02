@@ -14,7 +14,6 @@ CREATE TABLE [dbo].[hrm_LeaveAssignment](
     [EmployeeId] UNIQUEIDENTIFIER NOT NULL,
     [LeaveStartDate] DATE NOT NULL,
     [LeaveEndDate] DATE NOT NULL,
-    [Reason] NVARCHAR(MAX) NULL,
     [CreatedDateTime] DATETIME NOT NULL DEFAULT GETDATE(),
     [NoOfDays] DECIMAL(18, 2) NULL,
     CONSTRAINT [PK_hrm_LeaveAssignment] PRIMARY KEY CLUSTERED 
