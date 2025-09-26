@@ -1,0 +1,47 @@
+USE [FRM]
+GO
+
+-- SecurityTask
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Task] WHERE TaskId = 'e7f49085-8554-4d68-b74c-0ccdbaf00672')
+BEGIN
+    INSERT INTO [dbo].[TSys_Task]
+        ([TaskId], [TaskCode], [TaskShortName], [TaskName], [Description], [DomainId], [LicenceId], 
+         [TaskNumber], [ImageURL], [NavigateURL], [Controller], [Action], [IsActive], [Module], 
+         [X], [Y], [Width], [Height], [TileGroup], [TileTitle], [TileContent], [TileClass], 
+         [TileStyle], [IsShowAsTile])
+    VALUES
+        ('e7f49085-8554-4d68-b74c-0ccdbaf00672', 'FRM_SecurityTask', 'SecurityTask', 'SecurityTask', 'SecurityTask',
+         NULL, NULL, 2014, NULL, '/SecurityTask/index', 'SecurityTask', NULL, 1, 'FRM',
+         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1)
+END
+GO
+
+-- SecurityUser
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Task] WHERE TaskId = 'cbfcf3dd-cbb3-4371-8514-1be07216bca5')
+BEGIN
+    INSERT INTO [dbo].[TSys_Task]
+        ([TaskId], [TaskCode], [TaskShortName], [TaskName], [Description], [DomainId], [LicenceId], 
+         [TaskNumber], [ImageURL], [NavigateURL], [Controller], [Action], [IsActive], [Module], 
+         [X], [Y], [Width], [Height], [TileGroup], [TileTitle], [TileContent], [TileClass], 
+         [TileStyle], [IsShowAsTile])
+    VALUES
+        ('cbfcf3dd-cbb3-4371-8514-1be07216bca5', 'FRM_SecurityUser', 'SecurityUser', 'SecurityUser', 'SecurityUser',
+         NULL, NULL, 2016, NULL, '/SecurityUser/index', 'SecurityUser', NULL, 1, 'FRM',
+         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1)
+END
+GO
+
+-- SecurityRole
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Task] WHERE TaskId = '5ae11f2c-41b2-4f8d-945a-e5f7212a9940')
+BEGIN
+    INSERT INTO [dbo].[TSys_Task]
+        ([TaskId], [TaskCode], [TaskShortName], [TaskName], [Description], [DomainId], [LicenceId], 
+         [TaskNumber], [ImageURL], [NavigateURL], [Controller], [Action], [IsActive], [Module], 
+         [X], [Y], [Width], [Height], [TileGroup], [TileTitle], [TileContent], [TileClass], 
+         [TileStyle], [IsShowAsTile])
+    VALUES
+        ('5ae11f2c-41b2-4f8d-945a-e5f7212a9940', 'FRM_SecurityRole', 'SecurityRole', 'SecurityRole', 'SecurityRole',
+         NULL, NULL, 2015, NULL, '/SecurityRole/index', 'SecurityRole', NULL, 1, 'FRM',
+         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1)
+END
+GO
