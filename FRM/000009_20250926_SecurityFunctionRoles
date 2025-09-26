@@ -1,0 +1,44 @@
+USE [FRM]
+GO
+
+-- SecurityUser
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Role] WHERE RoleId = 'dd76a9fb-08e5-4598-85a2-486901dc2bf7')
+BEGIN
+    INSERT INTO [dbo].[TSys_Role]
+        ([RoleId], [RoleCode], [RoleName], [Description], [IsActive], 
+         [OrganizationId], [OrganizationCode], [BusinessUnitId], [BusinessUnitCode], 
+         [CreatedDateTime], [CreatedUserId], [UpdatedDateTime], [UpdatedUserId])
+    VALUES
+        ('dd76a9fb-08e5-4598-85a2-486901dc2bf7', 'SecurityUser', 'SecurityUser', 'SecurityUser', 1,
+         'bae027a7-2fa5-41ba-8753-1450fd21b181', 'O0001', 'f8ad62ee-8fc1-41c8-bf8d-2f1dfebd1d0a', 'B0001',
+         '2025-09-17 10:28:36.043', '2a9186ef-a859-4888-bb67-340b4f0fda22', NULL, NULL)
+END
+GO
+
+-- SecurityTask
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Role] WHERE RoleId = '9a0a90fb-6716-4284-af60-7634a274ddfd')
+BEGIN
+    INSERT INTO [dbo].[TSys_Role]
+        ([RoleId], [RoleCode], [RoleName], [Description], [IsActive], 
+         [OrganizationId], [OrganizationCode], [BusinessUnitId], [BusinessUnitCode], 
+         [CreatedDateTime], [CreatedUserId], [UpdatedDateTime], [UpdatedUserId])
+    VALUES
+        ('9a0a90fb-6716-4284-af60-7634a274ddfd', 'SecurityTask', 'SecurityTask', 'SecurityTask', 1,
+         'bae027a7-2fa5-41ba-8753-1450fd21b181', 'O0001', 'f8ad62ee-8fc1-41c8-bf8d-2f1dfebd1d0a', 'B0001',
+         '2025-09-17 10:26:44.103', '2a9186ef-a859-4888-bb67-340b4f0fda22', NULL, NULL)
+END
+GO
+
+-- SecurityRole
+IF NOT EXISTS (SELECT 1 FROM [dbo].[TSys_Role] WHERE RoleId = 'a01b8663-fec1-4a61-9be5-dbb3fcb21332')
+BEGIN
+    INSERT INTO [dbo].[TSys_Role]
+        ([RoleId], [RoleCode], [RoleName], [Description], [IsActive], 
+         [OrganizationId], [OrganizationCode], [BusinessUnitId], [BusinessUnitCode], 
+         [CreatedDateTime], [CreatedUserId], [UpdatedDateTime], [UpdatedUserId])
+    VALUES
+        ('a01b8663-fec1-4a61-9be5-dbb3fcb21332', 'SecurityRole', 'SecurityRole', 'SecurityRole', 1,
+         'bae027a7-2fa5-41ba-8753-1450fd21b181', 'O0001', 'f8ad62ee-8fc1-41c8-bf8d-2f1dfebd1d0a', 'B0001',
+         '2025-09-17 10:27:59.237', '2a9186ef-a859-4888-bb67-340b4f0fda22', NULL, NULL)
+END
+GO
