@@ -1,0 +1,34 @@
+USE [ERP];
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.tables t
+    INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+    WHERE t.name = 'hrm_OpeningLeave'
+      AND s.name = 'dbo'
+)
+BEGIN
+    CREATE TABLE [dbo].[hrm_OpeningLeave](
+          NOT NULL,
+          NOT NULL,
+          NOT NULL,
+        [Casual] [decimal](18, 2) NULL,
+        [Annual] [decimal](18, 2) NULL,
+        [Sick] [decimal](18, 2) NULL,
+        [Accident] [decimal](18, 2) NULL,
+        [Duty] [decimal](18, 2) NULL,
+        [Maternity] [decimal](18, 2) NULL,
+        [MaternityHalfPay] [decimal](18, 2) NULL,
+        [MaternityNoPay] [decimal](18, 2) NULL,
+        [Lieu] [decimal](18, 2) NULL,
+        [NoPay] [decimal](18, 2) NULL,
+        [Special] [decimal](18, 2) NULL,
+        [Paternity] [decimal](18, 2) NULL,
+        [RPTDays] [decimal](18, 2) NULL,
+        [SpecialFullPay] [decimal](18, 2) NULL,
+        [SpecialNoPay] [decimal](18, 2) NULL,
+          NULL
+    ) ON [PRIMARY];
+END;
+GO
