@@ -1,9 +1,6 @@
 USE [ERP]
 GO
 
-SET IDENTITY_INSERT [dbo].[hrm_EmployeeTransitionType] OFF
-GO
-
 INSERT INTO [dbo].[hrm_EmployeeTransitionType] 
 (EmployeeTransitionTypeId, Name, TransitionCode, IsActive)
 VALUES
@@ -23,3 +20,4 @@ VALUES
 ('5d0a5639-9e60-4c90-ad71-def539041c68', 'Passed Away', 'PAW', 1),
 ('ed04847b-df53-44c6-a60e-febdc60703dd', 'Rejoin ', 'RJ', 1);
 GO
+
