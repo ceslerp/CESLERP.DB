@@ -1,5 +1,5 @@
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM cmn_EmailNotificationConfig WHERE Code = 'LeaveNotification')
+    IF NOT EXISTS (SELECT 1 FROM cmn_EmailNotificationConfig WHERE Code = 'LeaveApproved')
     BEGIN
         INSERT INTO [cmn_EmailNotificationConfig]
             ([Code]
