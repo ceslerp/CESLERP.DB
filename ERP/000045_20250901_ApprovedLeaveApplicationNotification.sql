@@ -15,8 +15,8 @@ BEGIN
             ,[CreatedDate]
             ,[UpdatedDate])
         VALUES
-            ('LeaveNotification', -- Code
-            'Leave Notification', -- Name
+            ('LeaveApproved', -- Code
+            'LeaveApproved', -- Name
             'LeaveNotification.html', -- TemplateFile
             'SELECT ''Leave Application Notification'' AS Subject,
                     CONCAT(''Leave request has been submitted for LeaveApplicationId: '', @leaveApplicationId) AS BodyData', -- DataQuery
