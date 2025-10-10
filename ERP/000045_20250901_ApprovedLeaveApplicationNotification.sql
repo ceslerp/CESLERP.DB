@@ -17,7 +17,7 @@ BEGIN
         VALUES
             ('LeaveApproved', -- Code
             'LeaveApproved', -- Name
-            'LeaveNotification.html', -- TemplateFile
+            'ProjectNotifications.html', -- TemplateFile
             'SELECT ''Leave Application Notification'' AS Subject,
                     CONCAT(''Leave request has been submitted for LeaveApplicationId: '', @leaveApplicationId) AS BodyData', -- DataQuery
             'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]', -- FromQuery
@@ -50,7 +50,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        PRINT 'Error: Record with Code ''LeaveNotification'' already exists in cmn_EmailNotificationConfig.';
+        PRINT 'Error: Record with Code ''LeaveApproved'' already exists in cmn_EmailNotificationConfig.';
     END
 END
 GO
