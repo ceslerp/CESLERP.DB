@@ -16,10 +16,35 @@ BEGIN
             ,[UpdatedDate])
         VALUES
             ('LeaveApproved', -- Code
-            'LeaveApproved', -- Name
+            'Leave Application Approved', -- Name
             'ProjectNotifications.html', -- TemplateFile
-            'SELECT ''Leave Application Notification'' AS Subject,
-                    CONCAT(''Leave request has been submitted for LeaveApplicationId: '', @leaveApplicationId) AS BodyData', -- DataQuery
+            'SELECT ''Leave is Approved'' AS Subject,
+                   CONCAT(
+                       ''Leave application from '', emp.NameWithInitial,
+                       '' ('', emp.EPFNo, '') for '', lt.LeaveName, '' Leave'',
+                       '' from '', CONVERT(VARCHAR, la.LeaveStartDate, 103),
+                       '' to '', CONVERT(VARCHAR, la.LeaveEndDate, 103),
+                       '' ('', la.NoOfDays, '' days) has been approved by '', 
+                       appr.NameWithInitial,
+                       '' ('', appr.EPFNo, '').''
+                   ) AS BodyData,
+                   la.LeaveApplicationId,
+                   la.EmployeeId,
+                   emp.NameWithInitial AS EmployeeName,
+                   emp.EPFNo AS EmployeeEPFNo,
+                   lt.LeaveName + '' Leave'' AS LeaveType,
+                   la.LeaveStartDate,
+                   la.LeaveEndDate,
+                   la.NoOfDays,
+                   appr.NameWithInitial AS ApproverName,
+                   appr.EPFNo AS ApproverEPFNo
+            FROM hrm_LeaveApplication la
+            LEFT JOIN cmn_EmployeeVersion emp ON emp.EmployeeId = la.EmployeeId 
+                AND emp.DataStatus = 5
+            LEFT JOIN cmn_EmployeeVersion appr ON appr.EmployeeId = @userEmployeeId 
+                AND appr.DataStatus = 5
+            LEFT JOIN hrm_LeaveType lt ON lt.LeaveTypeId = la.LeaveTypeId
+            WHERE la.LeaveApplicationId = @leaveApplicationId', -- DataQuery
             'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]', -- FromQuery
             'SELECT ev.NameWithInitial, ev.PrivateEmail AS Email
              FROM cmn_EmployeeVersion ev
@@ -41,7 +66,7 @@ BEGIN
              AND ev.DataStatus = 5', -- ToQuery
             NULL, -- CcQuery
             NULL, -- BccQuery
-            '<leaveApplicationId,guid>', -- Parameters
+            '<leaveApplicationId,guid><userEmployeeId,guid>', -- Parameters
             1, -- Active
             GETDATE(), -- CreatedDate
             GETDATE()); -- UpdatedDate
