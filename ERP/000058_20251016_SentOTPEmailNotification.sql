@@ -17,10 +17,11 @@ BEGIN
             ,[CreatedDate]
             ,[UpdatedDate])
         VALUES
-            ('SentOTP', -- Code
-            'OTP Sent', -- Name
-            'ProjectNotifications.html', -- TemplateFile
-            'SELECT TOP 1
+            (
+                'SentOTP', -- Code
+                'OTP Sent', -- Name
+                'ProjectNotifications.html', -- TemplateFile
+                'SELECT TOP 1
     ''Your CESL Account OTP Code'' AS Subject,
     CONCAT(
         ''Dear '', ev.Title, '' '', ev.NameWithInitial, '', '',
@@ -30,24 +31,28 @@ BEGIN
 FROM cmn_EmployeeVersion ev
 WHERE ev.EmployeeId = @userEmployeeId
   AND ev.DataStatus = 5;', -- DataQuery
-            'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]', -- FromQuery
-            'SELECT 
+
+                'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]', -- FromQuery
+
+                'SELECT DISTINCT 
     rv.NameWithInitial,  
-    rv.Email AS Email
+    rv.Email
 FROM EmployeeRoleView rv
 WHERE rv.EmployeeId = @userEmployeeId;', -- ToQuery
-            NULL, -- CcQuery
-            NULL, -- BccQuery
-            '<plainOtp,string><userEmployeeId,guid>', -- TupleParameters
-            1, -- Active
-            GETDATE(), -- CreatedDate
-            GETDATE()); -- UpdatedDate
+
+                NULL, -- CcQuery
+                NULL, -- BccQuery
+                '<plainOtp,string><userEmployeeId,guid>', -- TupleParameters
+                1, -- Active
+                GETDATE(), -- CreatedDate
+                GETDATE()  -- UpdatedDate
+            );
 
         PRINT 'Insert successful into cmn_EmailNotificationConfig for SentOTP.';
     END
     ELSE
     BEGIN
-        PRINT 'Error: Record with Code ''SentOTP'' already exists in cmn_EmailNotificationConfig.';
+        PRINT 'Record with Code ''SentOTP'' already exists in cmn_EmailNotificationConfig.';
     END
 END
 GO
