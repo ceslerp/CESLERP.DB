@@ -11,7 +11,7 @@ GO
 CREATE TABLE [dbo].[hrm_OTP](
 	[OTPId] [uniqueidentifier] NOT NULL DEFAULT (newid()),
 	[EmployeeId] [uniqueidentifier] NOT NULL,
-	[OTP] [nvarchar](6) NOT NULL,
+	[OTP] [nvarchar](100) NOT NULL,
 	[CreatedDateTime] [datetime] NOT NULL DEFAULT (getdate()),
 	[IsVerified] [bit] NOT NULL DEFAULT ((0)),
 	[ExpireDateTime] [datetime] NULL,
