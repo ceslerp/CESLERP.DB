@@ -42,7 +42,7 @@ BEGIN
             'LeaveApproval', -- Name
             'ProjectNotifications.html', -- TemplateFile
             'SELECT 
-    ''Leave Application'' AS Subject,
+    ''Leave Application – Approval Pending'' AS Subject,
     CONCAT(
         ''Leave application from '', ev.NameWithInitial,
         '' ('', ev.EPFNo, '') for '', lt.LeaveName, '' Leave'', 
