@@ -65,7 +65,7 @@ VALUES (
         rv.NameWithInitial, 
         rv.Email
     FROM EmployeeRoleView rv
-    WHERE rv.RoleCode = ''COE''
+    WHERE rv.RoleCode = ''Approve Contract Renewal''
       AND rv.Email IS NOT NULL
       AND rv.EmployeeId IN (
           SELECT ws.HeadOfWorkSpace
@@ -86,3 +86,4 @@ VALUES (
     GETDATE()   -- UpdatedDate
 );
 GO
+
