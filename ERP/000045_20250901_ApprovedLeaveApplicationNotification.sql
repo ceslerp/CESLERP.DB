@@ -71,8 +71,7 @@ BEGIN
 
             'SELECT 
                 ev.NameWithInitial,
-                ev.PrivateEmail AS Email,
-                ''You are the covering employee for '' + emp.NameWithInitial + ''.'' AS CoveringMessage
+                ev.PrivateEmail AS Email                
              FROM hrm_LeaveApplication la
              INNER JOIN cmn_EmployeeVersion ev 
                     ON ev.EmployeeId = la.CoveringEmployeeId AND ev.DataStatus = 5
