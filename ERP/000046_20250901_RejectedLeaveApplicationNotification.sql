@@ -55,16 +55,6 @@ BEGIN
                  FROM hrm_LeaveApplication la 
                  WHERE la.LeaveApplicationId = @leaveApplicationId
              )
-             AND ev.DataStatus = 5
-             UNION ALL
-             SELECT ev.NameWithInitial, ev.PrivateEmail AS Email
-             FROM cmn_EmployeeVersion ev
-             WHERE ev.EmployeeId = (
-                 SELECT la.CoveringEmployeeId 
-                 FROM hrm_LeaveApplication la 
-                 WHERE la.LeaveApplicationId = @leaveApplicationId
-                   AND la.CoveringEmployeeId IS NOT NULL
-             )
              AND ev.DataStatus = 5', -- ToQuery
             NULL, -- CcQuery
             NULL, -- BccQuery
