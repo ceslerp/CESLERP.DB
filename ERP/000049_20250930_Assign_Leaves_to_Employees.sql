@@ -3,12 +3,34 @@ DECLARE @Year INT;
 DECLARE @StartDate DATE;
 DECLARE @EndDate DATE;
 
-SET @WorkspaceId = 'eb16ec4c-c35a-4aa3-9b70-125e88b18baa';
-SET @Year = 2025;
+--SET @WorkspaceId = '4D08FE85-1E63-4702-A01D-4DDAE0F9B7F9'	--ANU
+--SET @WorkspaceId = '479806B8-5530-4FB2-B6BD-B2966466950A'	--APS
+--SET @WorkspaceId = 'AB844422-3D20-4422-8F2F-D4522323B353'	--CEN
+--SET @WorkspaceId = 'D2F1E41C-A1F5-4303-B92C-AE1DA3B6841C'	--ENU
+--SET @WorkspaceId = 'C037E3A6-4664-4A4E-8AE2-9D1229A95E7D'	--ESE
+--SET @WorkspaceId = '9FAE38F8-8AE5-4568-A7E3-84F812861FC8'	--GDE
+--SET @WorkspaceId = '77FE8872-8853-4DF5-BDDD-D4223C2CD0A5'	--HED
+--SET @WorkspaceId = '193CE8FD-75BA-445B-AD0E-E7134C01F514'	--IRC
+--SET @WorkspaceId = 'CD9F80B3-12B7-446C-BF8C-C29F3DFE79D8'	--MEP
+--SET @WorkspaceId = '21DBBC90-6008-4C70-B60C-D8273233F61B'	--NCL
+--SET @WorkspaceId = 'C82037F3-84AD-4496-864C-B85F58C66F36'	--NOR
+--SET @WorkspaceId = 'EB16EC4C-C35A-4AA3-9B70-125E88B18BAA'	--NOW
+--SET @WorkspaceId = '4C64654F-98F7-4B99-BF1C-8F94F738962E'	--PCM
+--SET @WorkspaceId = '48EC83F2-0C60-4FD7-9B45-4CF69C642D77'	--POL
+--SET @WorkspaceId = '351D9AF2-2B79-42B1-BF44-0CB25396FCF1'	--SAB
+--SET @WorkspaceId = 'B7C894CA-7FA9-4B61-B2DE-A0C012C6A162'	--SOU
+--SET @WorkspaceId = '1EADB3AF-CFC8-4CE1-AD29-915ED1092ED3'	--UVA
+--SET @WorkspaceId = '00E4C82B-F78E-48B0-9C8C-23B5574CBE3D'	--WP1
+--SET @WorkspaceId = '06A2FE19-829F-4EA0-B521-73330C401B1B'	--WP2
+
+SET @Year = 2026;
 
 -- Define leave year period dynamically
-SET @StartDate = DATEFROMPARTS(@Year - 1, 12, 31);  -- 2024-12-31
-SET @EndDate   = DATEFROMPARTS(@Year, 12, 30);      -- 2025-12-30
+SET @StartDate = DATEFROMPARTS(@Year - 1, 12, 31);  -- 2025-12-31
+SET @EndDate   = DATEFROMPARTS(@Year, 12, 30);      -- 2026-12-30
+
+-- Define cutoff date: March 31, 2025
+DECLARE @CutoffDate DATE = DATEFROMPARTS(@Year, 3, 31);
 
 ;WITH LeaveTypes AS (
     SELECT 'b886edb2-6e4d-4e50-9669-9fe7cf0fc7c7' AS LeaveTypeId, 7  AS Days -- Casual
@@ -27,7 +49,7 @@ SET @EndDate   = DATEFROMPARTS(@Year, 12, 30);      -- 2025-12-30
 INSERT INTO hrm_LeaveAssignment
 SELECT 
     NEWID(),
-    '8d73f914-fb5c-4e00-9c5c-6ef1fe447cdc',
+    '660a89ae-c622-43b0-8c15-93fabc9cdd1b',
     LT.LeaveTypeId,
     EMP.EmployeeId,
     @StartDate,
@@ -38,14 +60,14 @@ FROM cmn_EmployeeVersion EMP
 CROSS JOIN LeaveTypes LT
 WHERE EMP.DataStatus = 5 
   AND EMP.TypeOfContract != 4
-  AND YEAR(EMP.DateOfAppointment) != @Year
+  AND EMP.DateOfAppointment <= @CutoffDate  -- Hired on or before March 31, 2025
   AND EMP.WorkSpaceId = @WorkspaceId
   AND NOT EXISTS (
         SELECT 1
         FROM hrm_LeaveAssignment L
         WHERE L.EmployeeId = EMP.EmployeeId
           AND L.LeaveTypeId = LT.LeaveTypeId
-          AND L.LeaveYearId = '8d73f914-fb5c-4e00-9c5c-6ef1fe447cdc'
+          AND L.LeaveYearId = '660a89ae-c622-43b0-8c15-93fabc9cdd1b'
           AND L.LeaveStartDate = @StartDate
           AND L.LeaveEndDate   = @EndDate
     );
