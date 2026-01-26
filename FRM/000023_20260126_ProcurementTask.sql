@@ -23,7 +23,7 @@ BEGIN
          'Procurement',
          NULL,
          NULL,
-         2023,
+         2026,
          NULL,
          '/Procurement/index',
          'Procurement',
@@ -35,4 +35,5 @@ BEGIN
          NULL, NULL,
          1)              -- True
 END
+
 GO
