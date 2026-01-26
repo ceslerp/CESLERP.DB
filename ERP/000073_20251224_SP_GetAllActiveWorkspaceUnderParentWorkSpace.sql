@@ -30,7 +30,7 @@ BEGIN
     ;WITH ret AS
     (
         SELECT *
-        FROM [ERP].[dbo].[cmn_WorkSpace]
+        FROM cmn_WorkSpace
         WHERE WorkSpaceId IN
         (
             SELECT WorkSpaceId
@@ -41,7 +41,7 @@ BEGIN
         UNION ALL
 
         SELECT t.*
-        FROM [ERP].[dbo].[cmn_WorkSpace] t
+        FROM cmn_WorkSpace t
         INNER JOIN ret r
             ON t.ParentWorkSpaceId = r.WorkSpaceId
     )
@@ -53,4 +53,5 @@ BEGIN
     ORDER BY Text
     OPTION (MAXRECURSION 32767);
 END
+
 
