@@ -20,7 +20,7 @@ BEGIN
         SELECT 
             WorkSpaceId AS Id,
             (WorkSpaceCode + '-' + WorkSpaceName) AS Text
-        FROM [ERP].[dbo].[cmn_WorkSpace]
+        FROM cmn_WorkSpace
         WHERE IsActive = 1
         ORDER BY WorkSpaceName;
 
@@ -53,5 +53,6 @@ BEGIN
     ORDER BY Text
     OPTION (MAXRECURSION 32767);
 END
+
 
 
