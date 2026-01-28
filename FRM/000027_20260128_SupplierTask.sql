@@ -1,0 +1,58 @@
+USE [FRM]
+GO
+
+INSERT INTO [dbo].[TSys_Task]
+(
+    [TaskId],
+    [TaskCode],
+    [TaskShortName],
+    [TaskName],
+    [Description],
+    [DomainId],
+    [LicenceId],
+    [TaskNumber],
+    [ImageURL],
+    [NavigateURL],
+    [Controller],
+    [Action],
+    [IsActive],
+    [Module],
+    [X],
+    [Y],
+    [Width],
+    [Height],
+    [TileGroup],
+    [TileTitle],
+    [TileContent],
+    [TileClass],
+    [TileStyle],
+    [IsShowAsTile]
+)
+VALUES
+(
+    '40364284-d9a4-4cd1-abab-888ad1785d0a',
+    'PRC_Supplier',
+    'Supplier',
+    'Supplier',
+    'Supplier',
+    NULL,
+    NULL,
+    2025,
+    NULL,
+    '/Supplier/index',
+    'Supplier',
+    NULL,
+    1,
+    'PRC',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    1
+);
+GO
