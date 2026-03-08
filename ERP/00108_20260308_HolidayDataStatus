@@ -1,0 +1,12 @@
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'hrm_Holidays')
+BEGIN
+    BEGIN TRANSACTION;
+
+    UPDATE hrm_Holidays
+    SET DataStatus = 5
+    WHERE DataStatus = 0;
+
+    PRINT CAST(@@ROWCOUNT AS VARCHAR) + ' rows updated';
+
+    COMMIT TRANSACTION;
+END
