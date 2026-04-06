@@ -24,7 +24,7 @@ BEGIN
 
             -- ✅ DataQuery
             'SELECT 
-                ''Attendance Approved'' AS Subject,
+                ''Attendance Request Approved'' AS Subject,
                 CONCAT(
                     ''Attendance request from '', emp.NameWithInitial,
                     '' ('', emp.EPFNo, '') on '',
