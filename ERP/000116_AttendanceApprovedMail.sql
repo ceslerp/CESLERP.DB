@@ -22,7 +22,7 @@ BEGIN
             'Circuit Attendance Approved',
             'ProjectNotifications.html',
 
-            -- ✅ DataQuery
+            -- ✅ FINAL DataQuery (FIXED)
             'SELECT 
                 ''Attendance Request Approved'' AS Subject,
                 CONCAT(
@@ -30,8 +30,8 @@ BEGIN
                     '' ('', emp.EPFNo, '') on '',
                     CONVERT(VARCHAR, ca.CircuitDate, 103),
                     CASE 
-                        WHEN at.AttendanceTypeName IS NOT NULL 
-                        THEN '' for '' + at.AttendanceTypeName 
+                        WHEN at.Name IS NOT NULL 
+                        THEN '' for '' + at.Name 
                         ELSE '''' 
                     END,
                     '' has been approved by '',
@@ -43,33 +43,33 @@ BEGIN
                 emp.NameWithInitial AS EmployeeName,
                 emp.EPFNo AS EmployeeEPFNo,
                 ca.CircuitDate,
-                at.AttendanceTypeName,
+                at.Name AS AttendanceTypeName,
                 appr.NameWithInitial AS ApproverName,
                 appr.EPFNo AS ApproverEPFNo
             FROM hrm_CircuitAttendance ca
             LEFT JOIN cmn_EmployeeVersion emp 
-                    ON emp.EmployeeId = ca.EmployeeId 
-                    AND emp.DataStatus = 5
+                ON emp.EmployeeId = ca.EmployeeId 
+                AND emp.DataStatus = 5
             LEFT JOIN cmn_EmployeeVersion appr
-                    ON appr.EmployeeId = @userEmployeeId 
-                    AND appr.DataStatus = 5
+                ON appr.EmployeeId = @userEmployeeId 
+                AND appr.DataStatus = 5
             LEFT JOIN hrm_AttendanceType at
-                    ON at.AttendanceTypeId = ca.AttendanceTypeId
+                ON at.AttendanceTypeId = ca.AttendanceTypeId
             WHERE ca.CircuitAttendanceId = @circuitAttendanceId',
 
-            -- FromQuery
-            'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]',
+            -- ✅ FromQuery
+            'SELECT ''notifications.ceslerp@gmail.com'' AS Email',
 
-            -- ✅ ToQuery (Send to Employee)
-            'SELECT ev.NameWithInitial,
-                    ev.PrivateEmail AS Email
+            -- ✅ FINAL ToQuery (FIXED)
+            'SELECT ev.PrivateEmail AS Email
              FROM cmn_EmployeeVersion ev
              WHERE ev.EmployeeId = (
                     SELECT ca.EmployeeId
                     FROM hrm_CircuitAttendance ca
                     WHERE ca.CircuitAttendanceId = @circuitAttendanceId
              )
-             AND ev.DataStatus = 5',
+             AND ev.DataStatus = 5
+             AND ev.PrivateEmail IS NOT NULL',
 
             -- No CC
             NULL,
