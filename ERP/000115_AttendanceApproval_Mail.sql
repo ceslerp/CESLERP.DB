@@ -88,50 +88,19 @@ BEGIN
             'select ''notifications.ceslerp@gmail.com'' as [Email]',
 
             -- ToQuery (unchanged)
-            'DECLARE @employeeId UNIQUEIDENTIFIER;
-
-            SELECT @employeeId = EmployeeId
-            FROM hrm_CircuitAttendance
-            WHERE CircuitAttendanceId = @circuitAttendanceId;
-
-            SELECT DISTINCT rv.NameWithInitial, rv.Email
-            FROM EmployeeRoleView rv
-            WHERE rv.EmployeeId IN (
-
-                SELECT ws.HeadOfWorkSpace
-                FROM cmn_EmployeeVersion ev
-                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
-                WHERE ev.EmployeeId = @employeeId
-                  AND ev.DataStatus = 5
-                  AND ev.SOEUnitId IS NOT NULL
-                  AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000''
-                  AND ws.HeadOfWorkSpace IS NOT NULL
-                  AND ws.HeadOfWorkSpace != ev.EmployeeId
-
-                UNION
-
-                SELECT ws.HeadOfWorkSpace
-                FROM cmn_EmployeeVersion ev
-                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
-                WHERE ev.EmployeeId = @employeeId
-                  AND ev.DataStatus = 5
-                  AND (ev.SOEUnitId IS NULL 
-                       OR ev.SOEUnitId = ''00000000-0000-0000-0000-000000000000'')
-                  AND ws.HeadOfWorkSpace IS NOT NULL
-                  AND ws.HeadOfWorkSpace != ev.EmployeeId
-
-                UNION
-
-                SELECT ceo.EmployeeId
-                FROM cmn_EmployeeVersion ev
-                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
-                CROSS JOIN EmployeeRoleView ceo
-                WHERE ev.EmployeeId = @employeeId
-                  AND ev.DataStatus = 5
-                  AND ws.HeadOfWorkSpace = ev.EmployeeId 
-                  AND ceo.RoleCode = ''CEO''
-            )
-            AND rv.Email IS NOT NULL',
+            'DECLARE @employeeId UNIQUEIDENTIFIER; SELECT @employeeId = EmployeeId FROM hrm_CircuitAttendance 
+			WHERE CircuitAttendanceId = @circuitAttendanceId; SELECT DISTINCT rv.NameWithInitial, rv.Email
+			 FROM EmployeeRoleView rv WHERE rv.EmployeeId IN ( SELECT ws.HeadOfWorkSpace
+			  FROM cmn_EmployeeVersion ev INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
+			   WHERE ev.EmployeeId = @employeeId AND ev.DataStatus = 5 AND ev.SOEUnitId IS NOT NULL 
+			   AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000'' AND ws.HeadOfWorkSpace IS NOT NULL
+			    AND ws.HeadOfWorkSpace != ev.EmployeeId UNION SELECT ws.HeadOfWorkSpace FROM cmn_EmployeeVersion ev 
+				INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId WHERE ev.EmployeeId = @employeeId
+				 AND ev.DataStatus = 5 AND (ev.SOEUnitId IS NULL OR ev.SOEUnitId = ''00000000-0000-0000-0000-000000000000'')
+				  AND ws.HeadOfWorkSpace IS NOT NULL AND ws.HeadOfWorkSpace != ev.EmployeeId UNION SELECT ceo.EmployeeId FROM cmn_EmployeeVersion
+				   ev INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId CROSS JOIN EmployeeRoleView 
+				   ceo WHERE ev.EmployeeId = @employeeId AND ev.DataStatus = 5 AND ws.HeadOfWorkSpace = ev.EmployeeId
+				    AND ceo.RoleCode = ''CEO'' ) AND rv.Email IS NOT NULL',
 
             NULL,
             NULL,
