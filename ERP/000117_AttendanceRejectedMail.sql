@@ -22,7 +22,7 @@ BEGIN
             'Circuit Attendance Rejected',
             'ProjectNotifications.html',
 
-            -- ✅ FIXED DataQuery
+            -- ✅ FINAL DataQuery
             'SELECT 
                 ''Attendance Rejected'' AS Subject,
                 CONCAT(
@@ -36,10 +36,10 @@ BEGIN
                     END,
                     '' has been rejected by '',
                     ISNULL(appr.NameWithInitial, ''''),
-                    '' ('', ISNULL(appr.EPFNo, ''''), '').'',
+                    '' ('', ISNULL(appr.EPFNo, ''''), '')'',
                     CASE 
                         WHEN ca.RejectComment IS NOT NULL 
-                        THEN '' Reason: '' + ca.RejectComment 
+                        THEN ''. Reason: '' + ca.RejectComment 
                         ELSE '''' 
                     END
                 ) AS BodyData,
@@ -56,36 +56,26 @@ BEGIN
             LEFT JOIN cmn_EmployeeVersion emp 
                 ON emp.EmployeeId = ca.EmployeeId 
                 AND emp.DataStatus = 5
-                AND emp.Version = (
-                    SELECT MAX(Version)
-                    FROM cmn_EmployeeVersion
-                    WHERE EmployeeId = ca.EmployeeId
-                )
             LEFT JOIN cmn_EmployeeVersion appr 
                 ON appr.EmployeeId = @userEmployeeId 
                 AND appr.DataStatus = 5
-                AND appr.Version = (
-                    SELECT MAX(Version)
-                    FROM cmn_EmployeeVersion
-                    WHERE EmployeeId = @userEmployeeId
-                )
             LEFT JOIN hrm_AttendanceType at
                 ON at.AttendanceTypeId = ca.AttendanceTypeId
             WHERE ca.CircuitAttendanceId = @circuitAttendanceId',
 
             -- FromQuery
-            'SELECT ''notifications.ceslerp@gmail.com'' AS [Email]',
+            'SELECT ''notifications.ceslerp@gmail.com'' AS Email',
 
-            -- ToQuery
-            'SELECT ev.NameWithInitial,
-                    ISNULL(ev.PrivateEmail, '''') AS Email
+            -- ✅ FINAL ToQuery (FIXED)
+            'SELECT ev.PrivateEmail AS Email
              FROM cmn_EmployeeVersion ev
              WHERE ev.EmployeeId = (
                  SELECT ca.EmployeeId 
                  FROM hrm_CircuitAttendance ca 
                  WHERE ca.CircuitAttendanceId = @circuitAttendanceId
              )
-             AND ev.DataStatus = 5',
+             AND ev.DataStatus = 5
+             AND ev.PrivateEmail IS NOT NULL',
 
             NULL,
             NULL,
