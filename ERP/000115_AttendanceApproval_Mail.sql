@@ -21,6 +21,7 @@ INNER JOIN cmn_EmployeeVersion ev
 WHERE ur.IsActive = 1;
 GO
 
+
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM cmn_EmailNotificationConfig WHERE Code = 'CircuitAttendanceApproval')
     BEGIN
@@ -45,7 +46,7 @@ BEGIN
             'CircuitAttendanceApproval',
             'ProjectNotifications.html',
 
-            -- ✅ UPDATED DataQuery
+            -- ✅ FINAL DataQuery (FIXED)
             'SELECT 
                 ''Attendance – Approval Pending'' AS Subject,
                 CONCAT(
@@ -53,8 +54,8 @@ BEGIN
                     '' ('', ev.EPFNo, '') on '',
                     CONVERT(VARCHAR, ca.CircuitDate, 103),
                     CASE 
-                        WHEN at.AttendanceTypeName IS NOT NULL 
-                        THEN '' for '' + at.AttendanceTypeName 
+                        WHEN at.Name IS NOT NULL 
+                        THEN '' for '' + at.Name 
                         ELSE '''' 
                     END,
                     CASE 
@@ -72,7 +73,7 @@ BEGIN
                 ca.EmployeeId,
                 ev.NameWithInitial AS EmployeeName,
                 ev.EPFNo,
-                at.AttendanceTypeName,
+                at.Name AS AttendanceTypeName,
                 ca.CircuitDate,
                 ca.CircuitNo,
                 ca.Reason
@@ -84,23 +85,44 @@ BEGIN
                 ON at.AttendanceTypeId = ca.AttendanceTypeId
             WHERE ca.CircuitAttendanceId = @circuitAttendanceId',
 
-            -- FromQuery
-            'select ''notifications.ceslerp@gmail.com'' as [Email]',
+            -- ✅ FromQuery
+            'SELECT ''notifications.ceslerp@gmail.com'' AS Email',
 
-            -- ToQuery (unchanged)
-            'DECLARE @employeeId UNIQUEIDENTIFIER; SELECT @employeeId = EmployeeId FROM hrm_CircuitAttendance 
-			WHERE CircuitAttendanceId = @circuitAttendanceId; SELECT DISTINCT rv.NameWithInitial, rv.Email
-			 FROM EmployeeRoleView rv WHERE rv.EmployeeId IN ( SELECT ws.HeadOfWorkSpace
-			  FROM cmn_EmployeeVersion ev INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
-			   WHERE ev.EmployeeId = @employeeId AND ev.DataStatus = 5 AND ev.SOEUnitId IS NOT NULL 
-			   AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000'' AND ws.HeadOfWorkSpace IS NOT NULL
-			    AND ws.HeadOfWorkSpace != ev.EmployeeId UNION SELECT ws.HeadOfWorkSpace FROM cmn_EmployeeVersion ev 
-				INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId WHERE ev.EmployeeId = @employeeId
-				 AND ev.DataStatus = 5 AND (ev.SOEUnitId IS NULL OR ev.SOEUnitId = ''00000000-0000-0000-0000-000000000000'')
-				  AND ws.HeadOfWorkSpace IS NOT NULL AND ws.HeadOfWorkSpace != ev.EmployeeId UNION SELECT ceo.EmployeeId FROM cmn_EmployeeVersion
-				   ev INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId CROSS JOIN EmployeeRoleView 
-				   ceo WHERE ev.EmployeeId = @employeeId AND ev.DataStatus = 5 AND ws.HeadOfWorkSpace = ev.EmployeeId
-				    AND ceo.RoleCode = ''CEO'' ) AND rv.Email IS NOT NULL',
+            -- ✅ FINAL ToQuery (FIXED)
+            'DECLARE @employeeId UNIQUEIDENTIFIER;
+
+             SELECT @employeeId = EmployeeId 
+             FROM hrm_CircuitAttendance 
+             WHERE CircuitAttendanceId = @circuitAttendanceId;
+
+             SELECT DISTINCT rv.Email
+             FROM EmployeeRoleView rv
+             WHERE rv.EmployeeId IN (
+                 
+                 SELECT ws.HeadOfWorkSpace
+                 FROM cmn_EmployeeVersion ev
+                 INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
+                 WHERE ev.EmployeeId = @employeeId
+                     AND ev.DataStatus = 5
+                     AND ev.SOEUnitId IS NOT NULL
+                     AND ws.HeadOfWorkSpace IS NOT NULL
+
+                 UNION
+
+                 SELECT ws.HeadOfWorkSpace
+                 FROM cmn_EmployeeVersion ev
+                 INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
+                 WHERE ev.EmployeeId = @employeeId
+                     AND ev.DataStatus = 5
+                     AND ws.HeadOfWorkSpace IS NOT NULL
+
+                 UNION
+
+                 SELECT ceo.EmployeeId
+                 FROM EmployeeRoleView ceo
+                 WHERE ceo.RoleCode = ''CEO''
+             )
+             AND rv.Email IS NOT NULL',
 
             NULL,
             NULL,
@@ -117,3 +139,4 @@ BEGIN
         PRINT 'Error: Record with Code ''CircuitAttendanceApproval'' already exists.';
     END
 END
+GO
