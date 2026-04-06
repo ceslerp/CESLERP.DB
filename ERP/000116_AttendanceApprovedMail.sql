@@ -92,4 +92,3 @@ BEGIN
     END
 END
 GO
-Is this also Ok for approved mail
