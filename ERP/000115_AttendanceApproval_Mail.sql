@@ -104,7 +104,7 @@ BEGIN
 
             NULL,
             NULL,
-            '<circuitAttendanceId,guid>',
+            '<circuitAttendanceId,guid><userEmployeeId,guid>',
             1,
             GETDATE(),
             GETDATE()
