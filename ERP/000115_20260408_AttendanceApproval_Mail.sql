@@ -88,42 +88,82 @@ BEGIN
             -- ✅ FromQuery
             'SELECT ''notifications.ceslerp@gmail.com'' AS Email',
 
-            -- ✅ FINAL ToQuery (FIXED)
+           -- ✅ FINAL ToQuery (ADVANCED VERSION)
             'DECLARE @employeeId UNIQUEIDENTIFIER;
-
-             SELECT @employeeId = EmployeeId 
-             FROM hrm_CircuitAttendance 
-             WHERE CircuitAttendanceId = @circuitAttendanceId;
-
-             SELECT DISTINCT rv.Email
-             FROM EmployeeRoleView rv
-             WHERE rv.EmployeeId IN (
-                 
-                 SELECT ws.HeadOfWorkSpace
-                 FROM cmn_EmployeeVersion ev
-                 INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
-                 WHERE ev.EmployeeId = @employeeId
-                     AND ev.DataStatus = 5
-                     AND ev.SOEUnitId IS NOT NULL
-                     AND ws.HeadOfWorkSpace IS NOT NULL
-
-                 UNION
-
-                 SELECT ws.HeadOfWorkSpace
-                 FROM cmn_EmployeeVersion ev
-                 INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
-                 WHERE ev.EmployeeId = @employeeId
-                     AND ev.DataStatus = 5
-                     AND ws.HeadOfWorkSpace IS NOT NULL
-
-                 UNION
-
-                 SELECT ceo.EmployeeId
-                 FROM EmployeeRoleView ceo
-                 WHERE ceo.RoleCode = ''CEO''
-             )
-             AND rv.Email IS NOT NULL',
-
+            
+            SELECT @employeeId = EmployeeId
+            FROM hrm_CircuitAttendance
+            WHERE CircuitAttendanceId = @circuitAttendanceId;
+            
+            SELECT DISTINCT rv.NameWithInitial, rv.Email
+            FROM EmployeeRoleView rv
+            WHERE rv.EmployeeId IN (
+                SELECT ws.HeadOfWorkSpace
+                FROM cmn_EmployeeVersion ev
+                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.SOEUnitId
+                WHERE ev.EmployeeId = @employeeId
+                  AND ev.DataStatus = 5
+                  AND ev.SOEUnitId IS NOT NULL
+                  AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000''
+                  AND ws.HeadOfWorkSpace IS NOT NULL
+                  AND ws.HeadOfWorkSpace != ev.EmployeeId
+                  AND NOT EXISTS (
+                      SELECT 1 FROM cmn_WorkSpace coe_ws 
+                      WHERE coe_ws.WorkSpaceId = ev.WorkSpaceId 
+                      AND coe_ws.HeadOfWorkSpace = ev.EmployeeId
+                  )
+            
+                UNION
+            
+                SELECT ws.HeadOfWorkSpace
+                FROM cmn_EmployeeVersion ev
+                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
+                WHERE ev.EmployeeId = @employeeId
+                  AND ev.DataStatus = 5
+                  AND (ev.SOEUnitId IS NULL OR ev.SOEUnitId = ''00000000-0000-0000-0000-000000000000'')
+                  AND ws.HeadOfWorkSpace IS NOT NULL
+                  AND ws.HeadOfWorkSpace != ev.EmployeeId
+            
+                UNION
+            
+                SELECT ws_main.HeadOfWorkSpace
+                FROM cmn_EmployeeVersion ev
+                INNER JOIN cmn_WorkSpace ws_soe ON ws_soe.WorkSpaceId = ev.SOEUnitId
+                INNER JOIN cmn_WorkSpace ws_main ON ws_main.WorkSpaceId = ev.WorkSpaceId
+                WHERE ev.EmployeeId = @employeeId
+                  AND ev.DataStatus = 5
+                  AND ev.SOEUnitId IS NOT NULL
+                  AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000''
+                  AND ws_soe.HeadOfWorkSpace IS NULL
+                  AND ws_main.HeadOfWorkSpace IS NOT NULL
+                  AND ws_main.HeadOfWorkSpace != ev.EmployeeId
+            
+                UNION
+            
+                SELECT ws_main.HeadOfWorkSpace
+                FROM cmn_EmployeeVersion ev
+                INNER JOIN cmn_WorkSpace ws_soe ON ws_soe.WorkSpaceId = ev.SOEUnitId
+                INNER JOIN cmn_WorkSpace ws_main ON ws_main.WorkSpaceId = ev.WorkSpaceId
+                WHERE ev.EmployeeId = @employeeId
+                  AND ev.DataStatus = 5
+                  AND ev.SOEUnitId IS NOT NULL
+                  AND ev.SOEUnitId != ''00000000-0000-0000-0000-000000000000''
+                  AND ws_soe.HeadOfWorkSpace = ev.EmployeeId  
+                  AND ws_main.HeadOfWorkSpace IS NOT NULL
+                  AND ws_main.HeadOfWorkSpace != ev.EmployeeId
+            
+                UNION
+            
+                SELECT ceo.EmployeeId
+                FROM cmn_EmployeeVersion ev
+                INNER JOIN cmn_WorkSpace ws ON ws.WorkSpaceId = ev.WorkSpaceId
+                CROSS JOIN EmployeeRoleView ceo
+                WHERE ev.EmployeeId = @employeeId
+                  AND ev.DataStatus = 5
+                  AND ws.HeadOfWorkSpace = ev.EmployeeId 
+                  AND ceo.RoleCode = ''CEO''
+            )
+            AND rv.Email IS NOT NULL',
             NULL,
             NULL,
             '<circuitAttendanceId,guid><userEmployeeId,guid>',
