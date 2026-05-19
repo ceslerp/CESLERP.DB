@@ -26,3 +26,16 @@ CREATE TABLE [dbo].[api_ApiUserScopes] (
         FOREIGN KEY ([ApiScopeId]) 
         REFERENCES [dbo].[api_ApiScopes]([ApiScopeId])
 );
+
+INSERT INTO [dbo].[api_ApiScopes]
+(
+    [ApiScopeId],
+    [ScopeName],
+    [ScopeDescription]
+)
+VALUES
+(
+    '4259EA2D-8A2F-4B8C-AF93-265A2052D898',
+    'cecb_user',
+    'CECB normal api user'
+);
