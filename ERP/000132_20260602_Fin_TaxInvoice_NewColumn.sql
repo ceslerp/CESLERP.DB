@@ -1,0 +1,9 @@
+USE [ERP];
+GO
+
+IF COL_LENGTH('dbo.fin_TaxInvoice', 'COEUnitId') IS NULL
+BEGIN
+    ALTER TABLE dbo.fin_TaxInvoice
+    ADD COEUnitId UNIQUEIDENTIFIER NULL;
+END
+GO
