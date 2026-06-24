@@ -11,8 +11,8 @@ GO
 -- Create date: 23-Jun-2026
 -- Description: Get Tax Invoice Summary Report (Summary)
 -- =============================================
--- EXEC dbo.fin_SPGetTaxInvoiceSummaryReport @EmployeeId = 'fcb14645-bbc4-4c57-9e3d-e1f09c5f8ac7'
-ALTER PROCEDURE [dbo].[fin_SPGetTaxInvoiceSummaryReport]
+-- EXEC dbo.fin_SPGetTaxInvoiceSummaryReport @EmployeeId = 'aa732813-c489-4798-b4a4-890511fb3cf1'
+CREATE PROCEDURE [dbo].[fin_SPGetTaxInvoiceSummaryReport]
     @InvoiceNo NVARCHAR(50) = NULL,
     @ClaimNo NVARCHAR(100) = NULL,
     @JobCode NVARCHAR(100) = NULL,
@@ -49,6 +49,19 @@ BEGIN
 		BEGIN
 		INSERT INTO #TempWorkspace SELECT WorkSpaceId FROM cmn_EmployeeVersion WHERE EmployeeId = @EmployeeId
 		END
+	END
+	DECLARE @IsSuperView BIT = 0;
+
+	DECLARE @SuperViewTaxInvoiceRoleId UNIQUEIDENTIFIER = 'B6A369BC-C86C-465D-84AB-94AAB664EB88';
+	IF EXISTS
+	(
+		SELECT 1
+		FROM EmployeeRoleView
+		WHERE EmployeeId = @EmployeeId
+		  AND RoleId = @SuperViewTaxInvoiceRoleId
+	)
+	BEGIN
+		SET @IsSuperView = 1;
 	END
 
 	DECLARE @InvoiceTypeInt INT = CASE WHEN @InvoiceType NOT LIKE '%[^0-9]%' AND @InvoiceType <> '' AND @InvoiceType <> '0' THEN CAST(@InvoiceType AS INT) ELSE NULL END
@@ -101,7 +114,7 @@ BEGIN
 	LEFT JOIN FRM.[dbo].[User] USR ON TI.CreatedUserId = USR.UserId
 	LEFT JOIN cmn_EmployeeVersion EMPV2 ON TI.ApprovedUserId = EMPV2.EmployeeId
 	LEFT JOIN cmn_EmployeeVersion EMPV1 ON EMPV1.EmployeeCode = USR.EmployeeCode
-    WHERE TI.COEUnitId IN (SELECT WorkSpaceId FROM #TempWorkspace)
+    WHERE(@IsSuperView = 1 OR TI.COEUnitId IN (SELECT WorkSpaceId FROM #TempWorkspace))
       AND (@InvoiceNo IS NULL OR @InvoiceNo = '' OR TI.InvoiceNo LIKE '%' + @InvoiceNo + '%')
       AND (@ClaimNo IS NULL OR @ClaimNo = '' OR TI.ClaimNo LIKE '%' + @ClaimNo + '%')
       AND (@JobCode IS NULL OR @JobCode = '' OR WRK.WorkSpaceCode LIKE '%' + @JobCode + '%' OR WRK.WorkSpaceName LIKE '%' + @JobCode + '%')
@@ -124,3 +137,4 @@ BEGIN
     ORDER BY TI.InvoiceDate DESC, TI.InvoiceNo;
     DROP TABLE #TempWorkspace;
 END
+
