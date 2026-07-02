@@ -1,6 +1,6 @@
 USE [ERP]
 GO
-/****** Object:  StoredProcedure [dbo].[fin_SPGetTaxInvoiceSummaryReport]    Script Date: 6/24/2026 4:48:04 PM ******/
+/****** Object:  StoredProcedure [dbo].[fin_SPGetTaxInvoiceSummaryReport]    Script Date: 6/30/2026 9:49:48 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -11,11 +11,13 @@ GO
 -- Create date: 23-Jun-2026
 -- Description: Get Tax Invoice Summary Report (Summary)
 -- =============================================
--- EXEC dbo.fin_SPGetTaxInvoiceSummaryReport @EmployeeId = 'aa732813-c489-4798-b4a4-890511fb3cf1'
+-- EXEC dbo.fin_SPGetTaxInvoiceSummaryReport @EmployeeId = 'fcb14645-bbc4-4c57-9e3d-e1f09c5f8ac7'
+-- EXEC dbo.fin_SPGetTaxInvoiceSummaryReport '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'fcb14645-bbc4-4c57-9e3d-e1f09c5f8ac7'
 CREATE PROCEDURE [dbo].[fin_SPGetTaxInvoiceSummaryReport]
     @InvoiceNo NVARCHAR(50) = NULL,
     @ClaimNo NVARCHAR(100) = NULL,
     @JobCode NVARCHAR(100) = NULL,
+	@COESection NVARCHAR(200) = NULL,
     @PurchaserName NVARCHAR(200) = NULL,
     @InvoiceType VARCHAR(10) = NULL,
     @DataStatus VARCHAR(10) = NULL,
@@ -98,7 +100,7 @@ BEGIN
         END AS DataStatus,
         TI.ClaimNo,
         WRK.WorkSpaceCode + ' - ' + WRK.WorkSpaceName AS JobCode,
-        COE.WorkSpaceCode + ' - ' + COE.WorkSpaceName AS [COE Unit],
+        COE.WorkSpaceCode + ' - ' + COE.WorkSpaceName AS COESection,
         TI.ContractSum,
         TI.TotalWorkDone,
         TI.NetAmount,
@@ -118,6 +120,13 @@ BEGIN
       AND (@InvoiceNo IS NULL OR @InvoiceNo = '' OR TI.InvoiceNo LIKE '%' + @InvoiceNo + '%')
       AND (@ClaimNo IS NULL OR @ClaimNo = '' OR TI.ClaimNo LIKE '%' + @ClaimNo + '%')
       AND (@JobCode IS NULL OR @JobCode = '' OR WRK.WorkSpaceCode LIKE '%' + @JobCode + '%' OR WRK.WorkSpaceName LIKE '%' + @JobCode + '%')
+	  AND (
+    @COESection IS NULL 
+    OR @COESection = '' 
+    OR COE.WorkSpaceCode LIKE '%' + @COESection + '%'
+    OR COE.WorkSpaceName LIKE '%' + @COESection + '%'
+    OR (COE.WorkSpaceCode + ' - ' + COE.WorkSpaceName) LIKE '%' + @COESection + '%'
+)
       AND (@PurchaserName IS NULL OR @PurchaserName = '' OR CLI.ClientName LIKE '%' + @PurchaserName + '%')
       AND (@InvoiceTypeInt IS NULL OR @InvoiceType = '' OR TI.InvoiceType = @InvoiceTypeInt)
 	  AND (@TotalAmountDueDec IS NULL OR TI.TotalAmountDue = @TotalAmountDueDec)
