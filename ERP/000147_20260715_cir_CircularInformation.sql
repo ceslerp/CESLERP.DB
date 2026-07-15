@@ -1,6 +1,5 @@
 USE [ERP]
 GO
-
 ;WITH RankedEmployeeVersions AS (
     SELECT
         EmployeeId,
