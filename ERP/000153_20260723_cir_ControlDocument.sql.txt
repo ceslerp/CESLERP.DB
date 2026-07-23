@@ -1,0 +1,40 @@
+INSERT INTO dbo.cmn_Attachment
+(
+    AttachmentId,
+    FileName,
+    ContentType,
+    Extension,
+    FileSize,
+    StoragePath,
+    CreatedDateTime,
+    CreatedUserId
+)
+SELECT
+    NEWID(),
+    LTRIM(RTRIM(CD.DocumentAttachment)),
+    'application/pdf',
+    'pdf',
+    179847,
+    'ControlDocuments/' + LTRIM(RTRIM(CD.DocumentAttachment)),
+    CD.CreatedDateTime,
+    CD.CreatedUserId
+FROM dbo.cir_ControlDocument CD
+INNER JOIN
+(
+    SELECT LTRIM(RTRIM(DocumentAttachment)) AS DocumentAttachment
+    FROM dbo.cir_ControlDocument
+    WHERE DocumentAttachment IS NOT NULL
+      AND LTRIM(RTRIM(DocumentAttachment)) <> ''
+    GROUP BY LTRIM(RTRIM(DocumentAttachment))
+    HAVING COUNT(*) = 1
+) UniqueAttachments
+    ON LTRIM(RTRIM(CD.DocumentAttachment))
+     = UniqueAttachments.DocumentAttachment
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.cmn_Attachment CA
+    WHERE CA.FileName = LTRIM(RTRIM(CD.DocumentAttachment))
+      AND CA.StoragePath =
+          'ControlDocuments/' + LTRIM(RTRIM(CD.DocumentAttachment))
+);

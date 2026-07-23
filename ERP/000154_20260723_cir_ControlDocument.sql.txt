@@ -1,0 +1,24 @@
+INSERT INTO dbo.cir_ControlDocumentAttachment
+(
+    DocumentId,
+    AttachmentId,
+    IsActive,
+    UpdatedDateTime,
+    UpdatedUserId
+)
+SELECT
+    CD.DocumentId,
+    CA.AttachmentId,
+    1,
+    NULL,
+    NULL
+FROM dbo.cir_ControlDocument CD
+INNER JOIN dbo.cmn_Attachment CA
+    ON CD.DocumentAttachment = CA.FileName
+WHERE NOT EXISTS
+(
+    SELECT 1
+    FROM dbo.cir_ControlDocumentAttachment CDA
+    WHERE CDA.DocumentId = CD.DocumentId
+      AND CDA.AttachmentId = CA.AttachmentId
+);
