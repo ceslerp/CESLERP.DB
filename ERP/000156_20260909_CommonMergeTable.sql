@@ -15,7 +15,7 @@ BEGIN
         [MergeId] [uniqueidentifier] NOT NULL,
         [EmployeeId] [uniqueidentifier] NOT NULL,
         [WorkSpaceId] [uniqueidentifier] NOT NULL,
-        [ModuleId] [uniqueidentifier] NOT NULL,
+        [ModuleId] [int] NOT NULL,
 
         CONSTRAINT [PK_cmn_CommonMerge]
         PRIMARY KEY CLUSTERED
