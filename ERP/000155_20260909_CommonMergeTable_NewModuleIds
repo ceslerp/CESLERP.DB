@@ -1,6 +1,6 @@
-public static class DefaultModules
+public enum ModuleEnum
 {
-    public static class Procurement { public static readonly Guid Id = Guid.Parse("00000000-0000-0000-0000-000000000001"); }
-    public static class HR { public static readonly Guid Id = Guid.Parse("00000000-0000-0000-0000-000000000002"); }
-    public static class Finance { public static readonly Guid Id = Guid.Parse("00000000-0000-0000-0000-000000000003"); }
+    Procurement = 1,
+    HR = 2,
+    Finance = 3
 }
