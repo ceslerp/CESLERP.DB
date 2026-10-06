@@ -1,0 +1,63 @@
+USE [FRM]
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM [dbo].[TSys_Task]
+    WHERE [TaskId] = '391a4bbf-b1c7-4db1-8d78-f3c93106a43d'
+)
+BEGIN
+    INSERT INTO [dbo].[TSys_Task] (
+        [TaskId],
+        [TaskCode],
+        [TaskShortName],
+        [TaskName],
+        [Description],
+        [DomainId],
+        [LicenceId],
+        [TaskNumber],
+        [ImageURL],
+        [NavigateURL],
+        [Controller],
+        [Action],
+        [IsActive],
+        [Module],
+        [X],
+        [Y],
+        [Width],
+        [Height],
+        [TileGroup],
+        [TileTitle],
+        [TileContent],
+        [TileClass],
+        [TileStyle],
+        [IsShowAsTile]
+    )
+    VALUES (
+        '391a4bbf-b1c7-4db1-8d78-f3c93106a43d',   -- TaskId
+        'CIR_ViewQualificationInfo',              -- TaskCode
+        'View Qualification Info',                -- TaskShortName
+        'View Qualification Info',                -- TaskName
+        'View Qualification Info',                -- Description
+        NULL,                                     -- DomainId
+        NULL,                                     -- LicenceId
+        2039,                                     -- TaskNumber
+        NULL,                                     -- ImageURL
+        '/ViewQualificationInfo/index',           -- NavigateURL
+        'ViewQualificationInfo',                  -- Controller
+        NULL,                                     -- Action
+        1,                                        -- IsActive
+        'CIR',                                    -- Module
+        NULL,                                     -- X
+        NULL,                                     -- Y
+        NULL,                                     -- Width
+        NULL,                                     -- Height
+        NULL,                                     -- TileGroup
+        NULL,                                     -- TileTitle
+        NULL,                                     -- TileContent
+        NULL,                                     -- TileClass
+        NULL,                                     -- TileStyle
+        1                                         -- IsShowAsTile
+    );
+END;
+GO

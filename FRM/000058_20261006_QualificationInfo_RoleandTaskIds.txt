@@ -1,0 +1,22 @@
+391a4bbf-b1c7-4db1-8d78-f3c93106a43d - task
+
+
+ff1d5764-00c6-4404-b2e5-b01a261fecb3 - Role
+
+
+
+
+task--
+
+391a4bbf-b1c7-4db1-8d78-f3c93106a43d	CIR_ViewQualificationInfo	View Qualification Info	View Qualification Info	View Qualification Info	NULL	NULL	2039	NULL	/ViewQualificationInfo/index	ViewQualificationInfo	NULL	True	CIR	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	True
+
+
+Role--
+
+ff1d5764-00c6-4404-b2e5-b01a261fecb3	View Qualification Info	View Qualification Info	View Qualification Info	True	bae027a7-2fa5-41ba-8753-1450fd21b181	O0001	f8ad62ee-8fc1-41c8-bf8d-2f1dfebd1d0a	B0001	2026-10-06 16:23:07.830	e1c3d9d0-0bac-4f44-bad3-9c30273b5d7d	NULL	NULL
+
+
+
+public static readonly Guid ViewQualificationInfo = Guid.Parse("840feed3-0ab9-4296-bd5d-25e811e4898c");
+
+public static readonly Guid QualificationInfo = Guid.Parse("391a4bbf-b1c7-4db1-8d78-f3c93106a43d");
