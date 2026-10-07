@@ -35,16 +35,16 @@ BEGIN
     )
     VALUES (
         '391a4bbf-b1c7-4db1-8d78-f3c93106a43d',   -- TaskId
-        'CIR_ViewQualificationInfo',              -- TaskCode
-        'View Qualification Info',                -- TaskShortName
-        'View Qualification Info',                -- TaskName
-        'View Qualification Info',                -- Description
+        'CIR_ViewGeneralDocumens',              -- TaskCode
+        'View General Documens',                -- TaskShortName
+        'View General Documens',                -- TaskName
+        'View General Documens',                -- Description
         NULL,                                     -- DomainId
         NULL,                                     -- LicenceId
         2039,                                     -- TaskNumber
         NULL,                                     -- ImageURL
-        '/ViewQualificationInfo/index',           -- NavigateURL
-        'ViewQualificationInfo',                  -- Controller
+        '/ViewGeneralDocumens/index',           -- NavigateURL
+        'ViewGeneralDocumens',                  -- Controller
         NULL,                                     -- Action
         1,                                        -- IsActive
         'CIR',                                    -- Module
