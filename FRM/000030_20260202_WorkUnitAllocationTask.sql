@@ -28,7 +28,7 @@ BEGIN
          'WorkUnitsAllocation',
          NULL,
          1,              -- True
-         'SMS',
+         'HRM',
          NULL, NULL, NULL, NULL,
          NULL, NULL, NULL,
          NULL, NULL,
